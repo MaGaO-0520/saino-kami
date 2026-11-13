@@ -32,59 +32,59 @@ button,input{font-family:inherit}
 .wrap{width:min(100%,1040px);margin-inline:auto}
 
 /* ---------- 舞台 ---------- */
-.stage{position:relative;container-type:inline-size;width:min(100%,560px);margin-inline:auto;aspect-ratio:4/5;background:var(--paper);overflow:hidden;isolation:isolate;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.stage{--q:1cqw;position:relative;container-type:inline-size;width:min(100%,560px);margin-inline:auto;aspect-ratio:25/28;background:var(--paper);overflow:hidden;isolation:isolate;user-select:none;-webkit-user-select:none;touch-action:manipulation}
 .stage *{box-sizing:border-box}
 .noise{position:absolute;inset:0;width:100%;height:100%;opacity:0;image-rendering:pixelated;z-index:0;transition:opacity .15s}
-.fig{position:absolute;left:41cqw;top:49cqw;width:18cqw;height:37.2cqw;z-index:1;transform-origin:50% 26%;transition:transform .8s ease;
+.fig{position:absolute;left:calc(41*var(--q));top:calc(49*var(--q));width:calc(18*var(--q));height:calc(37.2*var(--q));z-index:1;transform-origin:50% 26%;transition:transform .8s ease;
   -webkit-mask-image:linear-gradient(to bottom,#000 58%,transparent 100%);mask-image:linear-gradient(to bottom,#000 58%,transparent 100%)}
-.fig.b{left:40.69cqw;width:18.62cqw}
+.fig.b{left:calc(40.69*var(--q));width:calc(18.62*var(--q))}
 .fig img{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;-webkit-user-drag:none}
 .fig .open{opacity:0}
-.title{position:absolute;left:6cqw;top:4.5cqw;margin:0;font:900 6.1cqw/1.2 var(--display);letter-spacing:.2em;white-space:nowrap;z-index:3;color:var(--ink)}
+.title{position:absolute;left:calc(6*var(--q));top:calc(4.5*var(--q));margin:0;font:900 calc(6.1*var(--q))/1.2 var(--display);letter-spacing:.2em;white-space:nowrap;z-index:3;color:var(--ink)}
 
-.gauge{position:absolute;top:22cqw;height:76cqw;width:6.2cqw;border:.38cqw solid var(--ink);background:var(--mid);z-index:3;overflow:hidden}
-.gauge.l{left:3cqw}
-.gauge.r{right:3cqw}
+.gauge{position:absolute;top:calc(22*var(--q));height:calc(76*var(--q));width:calc(6.2*var(--q));border:calc(.38*var(--q)) solid var(--ink);background:var(--mid);z-index:3;overflow:hidden}
+.gauge.l{left:calc(3*var(--q))}
+.gauge.r{right:calc(3*var(--q))}
 .gauge i{position:absolute;left:0;right:0;transition:height .7s ease}
 .gauge .c{bottom:0;background:var(--crit);height:calc(var(--c) * 1%)}
 .gauge .f{top:0;background:var(--fumble);height:calc(var(--f) * 1%)}
 /* 目盛り: 1ごとに細く、5ごとに中くらい、25ごとに全幅。値は書かない */
-.gauge{--u:calc((76cqw - .76cqw) / 100)}
+.gauge{--u:calc((calc(76*var(--q)) - calc(.76*var(--q))) / 100)}
 .gauge::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
   background-image:
     repeating-linear-gradient(to top,rgba(10,10,10,.3) 0 1px,transparent 1px var(--u)),
     repeating-linear-gradient(to top,rgba(10,10,10,.75) 0 1px,transparent 1px calc(var(--u) * 5)),
     repeating-linear-gradient(to top,#0a0a0a 0 2px,transparent 2px calc(var(--u) * 25));
-  background-size:24% 100%,48% 100%,100% 100%;background-repeat:no-repeat;background-position:right bottom}
+  background-size:24% 100%,48% 100%,100% 100%;background-repeat:no-repeat;background-position:right bottom;clip-path:inset(0 0 3px 0)}
 .gauge.r::before{background-position:left bottom}
 
-.die{position:absolute;left:40.5cqw;top:15cqw;width:19cqw;height:19cqw;border:.38cqw solid var(--ink);background:var(--paper);display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:2cqw;z-index:3}
-.pip{width:3.6cqw;height:3.6cqw;border-radius:50%;background:var(--ink);place-self:center;transition:background .6s,box-shadow .6s}
-.pip.on{background:var(--pip);box-shadow:0 0 1.6cqw .3cqw rgba(229,32,26,.55)}
+.die{position:absolute;left:calc(40.5*var(--q));top:calc(15*var(--q));width:calc(19*var(--q));height:calc(19*var(--q));border:calc(.38*var(--q)) solid var(--ink);background:var(--paper);display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:calc(2*var(--q));z-index:3}
+.pip{width:calc(3.6*var(--q));height:calc(3.6*var(--q));border-radius:50%;background:var(--ink);place-self:center;transition:background .6s,box-shadow .6s}
+.pip.on{background:var(--pip);box-shadow:0 0 calc(1.6*var(--q)) calc(.3*var(--q)) rgba(229,32,26,.55)}
 /* 条件3の目は、見つけた値があるあいだだけ6分割で見える。無点灯のときは他の目と同じ */
 .pip.part{background:
   repeating-conic-gradient(from -1.2deg,rgba(255,255,255,.95) 0 2.4deg,transparent 2.4deg calc(360deg / var(--n,6))),
   conic-gradient(var(--pip) 0deg calc(var(--p,0) * 360deg / var(--n,6)),var(--ink) calc(var(--p,0) * 360deg / var(--n,6)) 360deg);
-  box-shadow:0 0 1cqw .1cqw rgba(229,32,26,.5)}
+  box-shadow:0 0 calc(1*var(--q)) calc(.1*var(--q)) rgba(229,32,26,.5)}
 
-.slot{position:absolute;top:41cqw;width:29cqw;z-index:3}
-.slot.s1{left:11.5cqw}
-.slot.s2{left:59.5cqw}
-.box{display:grid;place-items:center;width:100%;aspect-ratio:1;margin:0;padding:0;border:.38cqw solid var(--ink);background:var(--paper);color:var(--ink);font:900 17cqw/1 var(--display);cursor:default;-webkit-appearance:none;appearance:none;border-radius:0}
-.box .num{font-size:13.5cqw;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-.box .num.w3{font-size:11cqw}
+.slot{position:absolute;top:calc(41*var(--q));width:calc(29*var(--q));z-index:3}
+.slot.s1{left:calc(11.5*var(--q))}
+.slot.s2{left:calc(59.5*var(--q))}
+.box{display:grid;place-items:center;width:100%;aspect-ratio:1;margin:0;padding:0;border:calc(.38*var(--q)) solid var(--ink);background:var(--paper);color:var(--ink);font:900 calc(17*var(--q))/1 var(--display);cursor:default;-webkit-appearance:none;appearance:none;border-radius:0}
+.box .num{font-size:calc(13.5*var(--q));letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.box .num.w3{font-size:calc(11*var(--q))}
 .box.mine{cursor:pointer}
 .box.mine:active{transform:scale(.98)}
-.box:focus-visible,.sdie:focus-visible{outline:.7cqw solid var(--ink);outline-offset:.6cqw}
+.box:focus-visible,.sdie:focus-visible{outline:calc(.7*var(--q)) solid var(--ink);outline-offset:calc(.6*var(--q))}
 .box.wait{background:var(--ink);color:var(--paper)}
-.tag{margin-top:2.2cqw;height:6.4cqw;border:.38cqw solid var(--ink);background:var(--paper);display:flex;align-items:center;justify-content:center;font:700 3.1cqw/1 var(--display);letter-spacing:.18em;padding-inline:1cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
-.san{margin-top:2cqw;text-align:center;font:700 3.6cqw/1 var(--display);letter-spacing:.12em;font-variant-numeric:tabular-nums;color:var(--ink)}
+.tag{margin-top:calc(2.2*var(--q));height:calc(6.4*var(--q));border:calc(.38*var(--q)) solid var(--ink);background:var(--paper);display:flex;align-items:center;justify-content:center;font:700 calc(3.1*var(--q))/1 var(--display);letter-spacing:.18em;padding-inline:calc(1*var(--q));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+.san{margin-top:calc(2*var(--q));text-align:center;font:700 calc(3.6*var(--q))/1 var(--display);letter-spacing:.12em;font-variant-numeric:tabular-nums;color:var(--ink)}
 
 /* SANチェック用の普通のダイス（賽の神の目が開いている間だけ現れる） */
-.sdie{display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);width:12cqw;height:12cqw;margin:2.4cqw auto 0;padding:1.3cqw;border:.38cqw solid var(--ink);background:var(--paper);color:var(--ink);cursor:default;-webkit-appearance:none;appearance:none;border-radius:0}
+.sdie{display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);width:calc(12*var(--q));height:calc(12*var(--q));margin:calc(2.4*var(--q)) auto 0;padding:calc(1.3*var(--q));border:calc(.38*var(--q)) solid var(--ink);background:var(--paper);color:var(--ink);cursor:default;-webkit-appearance:none;appearance:none;border-radius:0}
 .sdie.mine{cursor:pointer}
-.sdie .sp{width:2.5cqw;height:2.5cqw;border-radius:50%;background:var(--ink);place-self:center}
-.sdie .q{grid-area:1/1/4/4;place-self:center;font:900 6.4cqw/1 var(--display)}
+.sdie .sp{width:calc(2.5*var(--q));height:calc(2.5*var(--q));border-radius:50%;background:var(--ink);place-self:center}
+.sdie .q{grid-area:1/1/4/4;place-self:center;font:900 calc(6.4*var(--q))/1 var(--display)}
 
 /* ---------- 賽の神の目が開いたとき（画面は変わらない） ---------- */
 .stage.eye .fig .open{opacity:1}
@@ -104,31 +104,31 @@ button,input{font-family:inherit}
 @keyframes blink{0%{transform:scaleY(0)}10%{transform:scaleY(1)}20%{transform:scaleY(0)}34%{transform:scaleY(0)}46%{transform:scaleY(1)}66%{transform:scaleY(1)}80%{transform:scaleY(0)}100%{transform:scaleY(0)}}
 @keyframes thump{0%,69%{scale:1}70%{scale:1.14}74%{scale:.92}78%{scale:1.07}82%,100%{scale:1}}
 @keyframes shake{0%,69%{translate:0 0}70%{translate:1.6% -.8%}73%{translate:-1.4% .9%}76%{translate:1% .5%}79%{translate:-.6% -.4%}82%,100%{translate:0 0}}
-.stage.god .fig img{filter:drop-shadow(-.3cqw 0 0 #00e5ff) drop-shadow(.3cqw 0 0 #ff1a1a) drop-shadow(.55cqw 0 0 #ffe600)}
+.stage.god .fig img{filter:drop-shadow(calc(-.3*var(--q)) 0 0 #00e5ff) drop-shadow(calc(.3*var(--q)) 0 0 #ff1a1a) drop-shadow(calc(.55*var(--q)) 0 0 #ffe600)}
 .stage.god .die,.stage.god .box,.stage.god .tag,.stage.god .sdie{background:transparent}
 .stage.god .box.wait{background:rgba(10,10,10,.85);color:#fff}
 .stage.god .sdie{background:rgba(10,10,10,.7)}
 .stage.god .sdie .sp{background:#fff}
 .stage.god .sdie .q{color:#fff}
-.stage.god .die,.stage.god .box,.stage.god .tag,.stage.god .gauge,.stage.god .sdie{box-shadow:-.3cqw 0 0 #00e5ff,.3cqw 0 0 #ff1a1a}
-.stage.god .title,.stage.god .tag,.stage.god .san,.stage.god .box .face,.stage.god .box .num{text-shadow:-.35cqw 0 #00e5ff,.35cqw 0 #ff1a1a,.7cqw 0 #ffe600}
-.stage.god .pip.on{box-shadow:0 0 2cqw .6cqw rgba(255,60,40,.9)}
+.stage.god .die,.stage.god .box,.stage.god .tag,.stage.god .gauge,.stage.god .sdie{box-shadow:calc(-.3*var(--q)) 0 0 #00e5ff,calc(.3*var(--q)) 0 0 #ff1a1a}
+.stage.god .title,.stage.god .tag,.stage.god .san,.stage.god .box .face,.stage.god .box .num{text-shadow:calc(-.35*var(--q)) 0 #00e5ff,calc(.35*var(--q)) 0 #ff1a1a,calc(.7*var(--q)) 0 #ffe600}
+.stage.god .pip.on{box-shadow:0 0 calc(2*var(--q)) calc(.6*var(--q)) rgba(255,60,40,.9)}
 
 @keyframes slice{
   0%{transform:none;clip-path:none}
-  18%{transform:translate(-.8cqw,0);clip-path:inset(0 0 55% 0)}
-  20%{transform:translate(.9cqw,0);clip-path:inset(45% 0 0 0)}
+  18%{transform:translate(calc(-.8*var(--q)),0);clip-path:inset(0 0 55% 0)}
+  20%{transform:translate(calc(.9*var(--q)),0);clip-path:inset(45% 0 0 0)}
   22%{transform:none;clip-path:none}
-  61%{transform:translate(.6cqw,.2cqw);clip-path:inset(30% 0 30% 0)}
+  61%{transform:translate(calc(.6*var(--q)),calc(.2*var(--q)));clip-path:inset(30% 0 30% 0)}
   63%{transform:none;clip-path:none}
   100%{transform:none;clip-path:none}
 }
 @keyframes jit{
   0%,100%{transform:none}
-  30%{transform:translate(.5cqw,0)}
-  32%{transform:translate(-.6cqw,.2cqw)}
+  30%{transform:translate(calc(.5*var(--q)),0)}
+  32%{transform:translate(calc(-.6*var(--q)),calc(.2*var(--q)))}
   34%{transform:none}
-  70%{transform:translate(-.3cqw,0) skewX(-2deg)}
+  70%{transform:translate(calc(-.3*var(--q)),0) skewX(-2deg)}
   72%{transform:none}
 }
 @keyframes enter{
@@ -141,7 +141,7 @@ button,input{font-family:inherit}
   72%{opacity:1}
   100%{filter:none}
 }
-@keyframes nudge{0%,100%{transform:none}50%{transform:translateY(-.7cqw)}}
+@keyframes nudge{0%,100%{transform:none}50%{transform:translateY(calc(-.7*var(--q)))}}
 @keyframes ready{0%,100%{opacity:1}50%{opacity:.78}}
 @media (prefers-reduced-motion:no-preference){
   .stage.god .title,.stage.god .tag{animation:slice 2.2s steps(1,end) infinite}
@@ -160,26 +160,26 @@ button,input{font-family:inherit}
 }
 
 /* ---------- ゲームオーバー / クリア ---------- */
-.ov{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6cqw}
-.ov.over{background:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 .3cqw,transparent .3cqw .9cqw),#0a0a0a;color:#fff}
+.ov{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(6*var(--q))}
+.ov.over{background:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 calc(.3*var(--q)),transparent calc(.3*var(--q)) calc(.9*var(--q))),#0a0a0a;color:#fff}
 .ov.clear{background:var(--paper);color:var(--ink)}
-.ov-title{margin:0;font:900 14cqw/1.15 var(--display);letter-spacing:.14em}
-.ov.over .ov-title{font-size:12.5cqw;letter-spacing:.05em;white-space:nowrap;text-shadow:-.5cqw 0 #00e5ff,.5cqw 0 #ff1a1a,1cqw 0 #ffe600}
-.ov-sub{margin:0 0 4cqw;font:700 3.8cqw/1.5 var(--display);letter-spacing:.14em;color:#ff7373}
-.ov-btn{margin-top:9cqw;padding:2.6cqw 8cqw;border:.5cqw solid #fff;background:transparent;color:#fff;font:900 5.4cqw/1 var(--display);letter-spacing:.16em;cursor:pointer;border-radius:0}
+.ov-title{margin:0;font:900 calc(14*var(--q))/1.15 var(--display);letter-spacing:.14em}
+.ov.over .ov-title{font-size:calc(12.5*var(--q));letter-spacing:.05em;white-space:nowrap;text-shadow:calc(-.5*var(--q)) 0 #00e5ff,calc(.5*var(--q)) 0 #ff1a1a,calc(1*var(--q)) 0 #ffe600}
+.ov-sub{margin:0 0 calc(4*var(--q));font:700 calc(3.8*var(--q))/1.5 var(--display);letter-spacing:.14em;color:#ff7373}
+.ov-btn{margin-top:calc(9*var(--q));padding:calc(2.6*var(--q)) calc(8*var(--q));border:calc(.5*var(--q)) solid #fff;background:transparent;color:#fff;font:900 calc(5.4*var(--q))/1 var(--display);letter-spacing:.16em;cursor:pointer;border-radius:0}
 @media (hover:hover){.ov-btn:hover{background:#fff;color:#0a0a0a}}
 .ov-btn:active{background:#fff;color:#0a0a0a}
-.ov-btn:focus-visible{outline:.7cqw solid #ff7373;outline-offset:.8cqw}
-.ov-note{margin:4cqw 0 0;min-height:1.5em;font:500 3cqw/1.5 var(--ui);color:#cfcfcf}
-.ov-kicker{margin:0 0 3cqw;font:700 3.8cqw/1.4 var(--display);letter-spacing:.3em;color:var(--ink-soft)}
-.ov.clear .ov-title{font-size:15cqw;margin-bottom:8cqw}
-.credits{margin:0;display:grid;gap:3.4cqw;width:100%;max-width:78cqw}
-.credits div{display:grid;gap:.8cqw}
-.credits dt{font:500 2.9cqw/1.3 var(--ui);letter-spacing:.24em;color:var(--ink-soft)}
-.credits dd{margin:0;font:900 4.6cqw/1.3 var(--display);letter-spacing:.1em;overflow-wrap:anywhere}
-.credits dd.sm{font-size:3.3cqw;font-weight:700;letter-spacing:.06em}
-.ov-end{margin:9cqw 0 0;font:700 3.2cqw/1 var(--display);letter-spacing:.3em;color:var(--ink-soft)}
-@keyframes rise{from{opacity:0;transform:translateY(2.4cqw)}to{opacity:1;transform:none}}
+.ov-btn:focus-visible{outline:calc(.7*var(--q)) solid #ff7373;outline-offset:calc(.8*var(--q))}
+.ov-note{margin:calc(4*var(--q)) 0 0;min-height:1.5em;font:500 calc(3*var(--q))/1.5 var(--ui);color:#cfcfcf}
+.ov-kicker{margin:0 0 calc(3*var(--q));font:700 calc(3.8*var(--q))/1.4 var(--display);letter-spacing:.3em;color:var(--ink-soft)}
+.ov.clear .ov-title{font-size:calc(15*var(--q));margin-bottom:calc(5*var(--q))}
+.credits{margin:0;display:grid;gap:calc(2.6*var(--q));width:100%;max-width:calc(78*var(--q))}
+.credits div{display:grid;gap:calc(.8*var(--q))}
+.credits dt{font:500 calc(2.9*var(--q))/1.3 var(--ui);letter-spacing:.24em;color:var(--ink-soft)}
+.credits dd{margin:0;font:900 calc(4.6*var(--q))/1.3 var(--display);letter-spacing:.1em;overflow-wrap:anywhere}
+.credits dd.sm{font-size:calc(3.3*var(--q));font-weight:700;letter-spacing:.06em}
+.ov-end{margin:calc(6*var(--q)) 0 0;font:700 calc(3.2*var(--q))/1 var(--display);letter-spacing:.3em;color:var(--ink-soft)}
+@keyframes rise{from{opacity:0;transform:translateY(calc(2.4*var(--q)))}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:no-preference){
   .ov.clear .ov-kicker,.ov.clear .ov-title,.ov.clear .credits>div,.ov.clear .ov-end{animation:rise .9s ease both}
   .ov.clear .ov-title{animation-delay:.25s}
@@ -191,6 +191,27 @@ button,input{font-family:inherit}
   .ov.over .ov-title{animation:jit 1.1s steps(1,end) infinite}
 }
 
+/* ---------- 画面サイズへの対応（スマホ・タブレット・PC） ---------- */
+.wrap.player{width:100%}
+@supports (height:100dvh){
+  .wrap.player{--sw:min(100%,calc((100dvh - 170px) * .8929),900px)}
+  .player .stage,.player .cap{width:var(--sw)}
+}
+@media (min-aspect-ratio:5/4) and (min-width:700px){
+  @supports (height:100dvh){.wrap.player{--sw:min(100%,calc((100dvh - 170px) * 1.9048),1600px)}}
+  .player .stage{aspect-ratio:40/21;--q:.5cqw}
+  .player .credits{grid-template-columns:1fr 1fr;column-gap:calc(8*var(--q));max-width:calc(130*var(--q))}
+  .player .ov.clear .ov-title{margin-bottom:calc(5*var(--q))}
+  .player .ov-end{margin-top:calc(6*var(--q))}
+  .player .title{left:0;width:100%;text-align:center}
+  .player .die{left:calc(90.5*var(--q))}
+  .player .fig{left:calc(87.85*var(--q));width:calc(24.3*var(--q));height:calc(50.2*var(--q))}
+  .player .fig.b{left:calc(87.43*var(--q));width:calc(25.14*var(--q))}
+  .player .slot.s1{left:calc(28*var(--q))}
+  .player .slot.s2{left:calc(143*var(--q))}
+  .player .gauge.l{left:calc(6*var(--q))}
+  .player .gauge.r{right:calc(6*var(--q))}
+}
 /* ---------- 共通パーツ ---------- */
 .cap{width:min(100%,560px);margin:16px auto 0}
 .cap p{margin:0 0 8px}
@@ -204,9 +225,10 @@ button,input{font-family:inherit}
 .link:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 
 /* ---------- 役割の選択 ---------- */
+.pick{text-align:center}
 .pick h1{margin:6vh 0 10px;font:900 clamp(26px,7vw,44px)/1.25 var(--display);letter-spacing:.14em}
-.pick p{max-width:34em;margin:0 0 6px}
-.roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:22px;max-width:560px}
+.pick p{max-width:34em;margin:0 auto 6px}
+.roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:22px auto 0;max-width:560px}
 .roles button{border:2px solid var(--ink);background:var(--paper);color:var(--ink);padding:22px 12px;font:900 20px var(--display);letter-spacing:.14em;cursor:pointer;border-radius:0}
 .roles button small{display:block;margin-top:4px;font:500 12px var(--ui);letter-spacing:.04em;color:inherit}
 @media (hover:hover){.roles button:hover{background:var(--ink);color:var(--paper)}}
