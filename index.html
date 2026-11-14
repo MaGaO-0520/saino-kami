@@ -88,6 +88,7 @@ button,input{font-family:inherit}
 
 /* ---------- 賽の神の目が開いたとき（画面は変わらない） ---------- */
 .stage.eye .fig .open{opacity:1}
+.stage.sanlock .box{opacity:.45}
 .stage.eye .fig .closed{opacity:0;transition:opacity .12s .1s}
 @keyframes lid{0%{clip-path:inset(30% 0 68% 0)}55%{clip-path:inset(20% 0 62% 0)}100%{clip-path:inset(0 0 0 0)}}
 @media (prefers-reduced-motion:no-preference){.stage.eye .fig .open{animation:lid .6s cubic-bezier(.2,.7,.3,1)}}
@@ -237,12 +238,16 @@ button,input{font-family:inherit}
 .bar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 16px;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:20px}
 .brand{margin:0;font:900 22px/1.3 var(--display);letter-spacing:.12em}
 .brand small{font:500 13px var(--ui);letter-spacing:.05em;margin-left:10px;color:var(--ink-soft)}
-.gm-grid{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:28px;align-items:start}
+.wrap.gm{width:min(100%,1400px)}
+.gm-grid{display:grid;grid-template-columns:minmax(0,min(44vw,560px)) minmax(0,1fr);gap:28px;align-items:start}
+.gm-grid>div{min-width:0}
+@media (min-width:861px){.gm-grid>div:first-child{position:sticky;top:12px}}
 @media (max-width:860px){.gm-grid{grid-template-columns:minmax(0,1fr)}}
 .gm .stage{width:100%;outline:2px solid var(--ink);outline-offset:-2px}
+@supports (height:100dvh){@media (min-width:861px){.gm .stage{width:min(100%,calc((100dvh - 170px) * .8))}}}
 .hint{margin:10px 0 0;font-size:12.5px;color:var(--ink-soft)}
 .notice{margin:0 0 14px;padding:10px 12px;border:2px solid var(--pip);font-size:13.5px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px;margin-top:18px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,350px),1fr));gap:16px;margin-top:18px}
 .card{border:2px solid var(--ink);padding:14px;display:grid;gap:12px;min-width:0;align-content:start}
 .card h2{margin:0;font:900 18px/1.3 var(--display);letter-spacing:.14em;overflow-wrap:anywhere}
 .nm{display:flex;gap:8px;align-items:center;font-size:12.5px;margin-top:6px}
@@ -252,7 +257,7 @@ input[type="text"],input[type="number"]{border:1.5px solid var(--ink);background
 .k{font-weight:700;font-size:13px;min-width:5.6em}
 .line output{font:700 17px var(--display);font-variant-numeric:tabular-nums;letter-spacing:.04em}
 .line .n{font-size:12px;color:var(--ink-soft)}
-.steps{display:flex;gap:6px;margin-left:auto;align-items:center}
+.steps{display:flex;flex-wrap:wrap;gap:6px;margin-left:auto;align-items:center}
 .steps input[type="number"]{width:4.6em;text-align:center;font-variant-numeric:tabular-nums}
 .btn{min-width:44px;height:40px;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);font:700 14px var(--ui);cursor:pointer;border-radius:0;padding:0 8px}
 @media (hover:hover){.btn:hover:not(:disabled){background:var(--ink);color:var(--paper)}}
@@ -275,7 +280,7 @@ input[type="text"],input[type="number"]{border:1.5px solid var(--ink);background
 .badge.c{background:var(--crit)}
 .badge.f{background:var(--fumble)}
 .badge.w{background:var(--ink);color:var(--paper)}
-.sec{margin-top:18px;border:2px solid var(--ink);padding:14px;display:grid;gap:12px}
+.sec{margin-top:18px;border:2px solid var(--ink);padding:14px;display:grid;gap:12px;min-width:0}
 .sec:first-child{margin-top:0}
 .sec h2{margin:0;font:900 16px var(--display);letter-spacing:.14em}
 .seg,.pipbtns,.chips{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
@@ -423,6 +428,7 @@ const DEFAULT_STATE={
   guessed:0,
   god:0,
   sanOn:{p1:false,p2:false},
+  sanDue:{p1:false,p2:false},
   auto:true
 };
 const reduced=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -554,6 +560,7 @@ function normalize(d){
     const w=d.words&&d.words[r];
     s.words[r]={sai:toInt(w&&w.sai,0,9999,0),dice:toInt(w&&w.dice,0,9999,0)};
     s.sanOn[r]=!!(d.sanOn&&d.sanOn[r]===true);
+    s.sanDue[r]=!!(d.sanDue&&d.sanDue[r]===true);
   });
   s.pipCount=5;
   if(Array.isArray(d.pips))s.pips=s.pips.map((_,i)=>d.pips[i]===true);
@@ -563,6 +570,7 @@ function normalize(d){
   if(s.god===2)ROLES.forEach(r=>{s.sanOn[r]=true;});
   else if(s.god===0)ROLES.forEach(r=>{s.sanOn[r]=false;});
   else if(!ROLES.some(r=>s.sanOn[r]))s.god=0;
+  ROLES.forEach(r=>{if(s.god===0||!s.sanOn[r])s.sanDue[r]=false;});
   s.auto=d.auto!==false;
   return s;
 }
@@ -604,7 +612,8 @@ function roundValue(k,r){
   if(x.n===r+1)return x.pv;
   return undefined;
 }
-function canRoll(k){return store.canWrite!==false&&nOf(k)<=nOf(other(k));}
+const sanBlocked=()=>!!(store.state.sanDue&&(store.state.sanDue.p1||store.state.sanDue.p2));
+function canRoll(k){return store.canWrite!==false&&!sanBlocked()&&nOf(k)<=nOf(other(k));}
 
 let saveTimer=null,saveBusy=false;
 const gmBusy=()=>saveTimer!==null||saveBusy;
@@ -698,6 +707,7 @@ function gmProcess(fromCache){
   if(!(v1>0&&v2>0))return;
   const s0=store.state,nm=s0.names;
   addLog('第'+r+'回  '+nm.p1+' '+v1+' / '+nm.p2+' '+v2);
+  if(s0.god===2)gmEdit(s=>{ROLES.forEach(k=>{s.sanDue[k]=true;});});
   if(!s0.auto)return;
   const c1=v1<=s0.crit.p1,c2=v2<=s0.crit.p2,f1=v1>=s0.fumble.p1,f2=v2>=s0.fumble.p2;
   const newFound=[];
@@ -705,13 +715,16 @@ function gmProcess(fromCache){
   const msgs=[],toClear=[];
   gmEdit(s=>{
     if(c1&&c2&&!s.pips[1]){s.pips[1]=true;msgs.push('2人同時クリティカル → 目2を点灯');}
+    [['p1',c1],['p2',c2]].forEach(a=>{
+      if(a[1]&&s.crit[a[0]]<49){s.crit[a[0]]+=1;msgs.push(nm[a[0]]+'がクリティカル → クリティカル範囲＋1（1–'+s.crit[a[0]]+'）');}
+    });
     newFound.forEach(v=>{s.found.push(v);});
     if(newFound.length)msgs.push('条件3: '+newFound.join('、')+' を発見（'+(s.found.length)+'/6）');
     if(f1&&f2){
-      if(s.god<2){s.god=2;toClear.push('p1','p2');msgs.push('2人同時ファンブル → 賽の神の怒り');}
+      if(s.god<2){s.god=2;ROLES.forEach(k=>{s.sanDue[k]=true;});toClear.push('p1','p2');msgs.push('2人同時ファンブル → 賽の神の怒り');}
     }else if(f1||f2){
       const k=f1?'p1':'p2';
-      if(s.god<2){s.god=1;s.sanOn[k]=true;toClear.push(k);msgs.push(nm[k]+'がファンブル → 賽の神が目を開く');}
+      if(s.god<2){s.god=1;s.sanOn[k]=true;s.sanDue[k]=true;toClear.push(k);msgs.push(nm[k]+'がファンブル → 賽の神が目を開く');}
     }
   });
   msgs.forEach(addLog);
@@ -946,6 +959,7 @@ function createStage(role,handlers,opts){
     const wrath=s.god===2;
     const eye=s.god>=1&&ROLES.some(k=>s.sanOn[k]);
     el.classList.toggle('eye',eye);
+    el.classList.toggle('sanlock',!!(s.sanDue.p1||s.sanDue.p2));
     if(lastWrath!==wrath){
       clearTimeout(godTimer);clearTimeout(entTimer);godPending=false;
       if(wrath&&lastWrath!==null&&!reduced){
@@ -1038,7 +1052,11 @@ function playerView(role){
     stage.update();
     how.textContent='あなたは '+store.state.names[role]+' です。自分のサイコロをタップしてください。2人が押すと、同時に振られます。';
     const mine=shownOf(role),oth=shownOf(other(role));
-    msg.textContent=mine.kind==='pending'?'相手が押すのを待っています…':(oth.kind==='pending'?'相手の準備ができています。タップすると同時に振られます。':'');
+    const sd=store.state.sanDue,myRec=store.sans[role];
+    let text=mine.kind==='pending'?'相手が押すのを待っています…':(oth.kind==='pending'?'相手の準備ができています。タップすると同時に振られます。':'');
+    if(sd[role])text=(myRec&&myRec.value>0)?'GMがSAN値を減らすのを待っています。終わるまでサイコロは振れません。':'賽の神のSANチェックです。SANダイスをタップして振ってください。終わるまでサイコロは振れません。';
+    else if(sd[other(role)])text='相手のSANチェックが終わるまで、サイコロは振れません。';
+    msg.textContent=text;
     let key=store.status;
     if(store.canWrite===false&&key!=='offline')key='readonly';
     box.dataset.s=key;
@@ -1093,6 +1111,7 @@ function gmView(){
             '<button type="button" class="btn hot" data-act="wrath" aria-pressed="false">怒りを呼ぶ</button>'+
             '<button type="button" class="btn" data-act="calm" aria-pressed="false">鎮める</button></div>'+
           '<p class="note">目を開く: 画面はそのまま。賽の神が目を開き、対象のSANダイスが現れます（1回きり）。怒りを呼ぶ: 画面が崩れ、2人に毎ターンSANダイスが現れます。</p>'+
+          '<div class="line"><button type="button" class="btn wide" data-act="sanrelease">SANチェック待ちを解除</button><span class="note" data-o="sanwait"></span></div>'+
           '<button type="button" class="btn" data-act="auto" aria-pressed="true">自動判定</button>'+
           '<p class="note">オンの間、次を自動で行います。2人同時クリティカルで目2を点灯、条件3の値を記録、片方のファンブルで目を開く、2人同時ファンブルで怒りを呼ぶ、「サイコロ」が合計30回で目1を点灯、「ダイス」が合計30回で怒りを呼ぶ。手動の操作はオンでもいつでもできます。</p>'+
         '</section>'+
@@ -1150,21 +1169,23 @@ function gmView(){
     if(act==='eye'){
       const list=ROLES.filter(r=>tgt[r]);
       if(!list.length||store.state.god===2)return;
-      gmEdit(s=>{s.god=1;list.forEach(r=>{s.sanOn[r]=true;});});
+      gmEdit(s=>{s.god=1;list.forEach(r=>{s.sanOn[r]=true;s.sanDue[r]=true;});});
       clearSans(list);
       addLog('賽の神が目を開いた（'+list.map(r=>store.state.names[r]).join('、')+'）');
     }else if(act==='wrath'){
-      gmEdit(s=>{s.god=2;});clearSans(['p1','p2']);addLog('賽の神の怒り');
+      gmEdit(s=>{s.god=2;ROLES.forEach(r=>{s.sanDue[r]=true;});});clearSans(['p1','p2']);addLog('賽の神の怒り');
     }else if(act==='calm'){
-      gmEdit(s=>{s.god=0;});clearSans(['p1','p2']);addLog('賽の神を鎮めた');
+      gmEdit(s=>{s.god=0;ROLES.forEach(r=>{s.sanDue[r]=false;});});clearSans(['p1','p2']);addLog('賽の神を鎮めた');
+    }else if(act==='sanrelease'){
+      gmEdit(s=>{ROLES.forEach(r=>{s.sanDue[r]=false;});});addLog('SANチェック待ちを解除');
     }else if(act==='auto'){
       gmEdit(s=>{s.auto=!s.auto;});
     }else if(act==='san')gmEdit(s=>{s.san[k]=clamp(s.san[k]+d,0,999);});
     else if(act==='sanapply'){
       const rec=store.sans[k];
       if(!rec||!rec.value)return;
-      const loss=Math.ceil(rec.value/2);
-      gmEdit(s=>{s.san[k]=clamp(s.san[k]-loss,0,999);if(s.god===1)s.sanOn[k]=false;});
+      const loss=rec.value;
+      gmEdit(s=>{s.san[k]=clamp(s.san[k]-loss,0,999);s.sanDue[k]=false;if(s.god===1)s.sanOn[k]=false;});
       clearSans([k]);
       addLog(store.state.names[k]+' SANチェック 出目'+rec.value+' → SAN −'+loss);
     }
@@ -1177,7 +1198,7 @@ function gmView(){
         const after=s.words.p1[type]+s.words.p2[type];
         if(s.auto&&before<GOAL&&after>=GOAL){
           if(type==='sai'&&!s.pips[0]){s.pips[0]=true;events.push('「サイコロ」が合計'+GOAL+'回 → 目1を点灯');}
-          if(type==='dice'&&s.god<2){s.god=2;events.push('「ダイス」が合計'+GOAL+'回 → 賽の神の怒り');}
+          if(type==='dice'&&s.god<2){s.god=2;ROLES.forEach(r=>{s.sanDue[r]=true;});events.push('「ダイス」が合計'+GOAL+'回 → 賽の神の怒り');}
         }
       });
       events.forEach(addLog);
@@ -1252,10 +1273,10 @@ function gmView(){
       if(!vis){stEl.textContent='ダイスは出ていません';ap.disabled=true;ap.textContent='適用';}
       else if(!sv){stEl.textContent='プレイヤーが振るのを待っています';ap.disabled=true;ap.textContent='適用';}
       else{
-        const loss=Math.ceil(sv/2);
+        const loss=sv;
         stEl.appendChild(document.createTextNode('出目 '));
         const bo=document.createElement('b');bo.textContent=String(sv);stEl.appendChild(bo);
-        stEl.appendChild(document.createTextNode('　→ 1d3換算で '+loss));
+        stEl.appendChild(document.createTextNode('　→ 1d6 で SAN −'+loss));
         ap.disabled=locked;ap.textContent='SAN −'+loss+' を適用';
       }
 
@@ -1277,6 +1298,9 @@ function gmView(){
     });
     const modeText=s.god===2?'怒り（毎ターンSANチェック）':(s.god===1?'目が開いている（SANチェック1回）':'静か');
     el.querySelector('[data-o="mode"]').textContent=modeText;
+    const waiting=ROLES.filter(r=>s.sanDue[r]).map(r=>s.names[r]);
+    el.querySelector('[data-o="sanwait"]').textContent=waiting.length?'SANチェック待ち: '+waiting.join('、')+'（完了までサイコロは振れません）':'';
+    el.querySelector('[data-act="sanrelease"]').disabled=locked||!waiting.length;
     const ovr=isOver(s),clr=!ovr&&allLit(s);
     el.querySelector('[data-o="phase"]').textContent=ovr?'いま: ゲームオーバー画面（Continueで初期化されます）':(clr?'いま: クリア画面（「ゲームを初期化する」で最初から）':'');
     el.querySelector('[data-act="eye"]').setAttribute('aria-pressed',String(s.god===1));
