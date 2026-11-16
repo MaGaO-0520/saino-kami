@@ -6,7 +6,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Old+Mincho:wght@700;900&display=swap">
 <style>
-/* 構成: 白い紙と黒い墨だけの静かな舞台。左右に縦ゲージ、中央に人影。賽の神の目が開くとSANダイスが現れ、怒ると赤いノイズに崩れる。 */
+/* 構成: 白い紙と黒い墨だけの静かな舞台。左右に縦ゲージ、中央に人影。賽の神の目が開くとSANサイコロが現れ、怒ると赤いノイズに崩れる。 */
 :root{
   --paper:#ffffff;
   --ink:#0a0a0a;
@@ -80,7 +80,7 @@ button,input{font-family:inherit}
 .tag{margin-top:calc(2.2*var(--q));height:calc(6.4*var(--q));border:calc(.38*var(--q)) solid var(--ink);background:var(--paper);display:flex;align-items:center;justify-content:center;font:700 calc(3.1*var(--q))/1 var(--display);letter-spacing:.18em;padding-inline:calc(1*var(--q));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
 .san{margin-top:calc(2*var(--q));text-align:center;font:700 calc(3.6*var(--q))/1 var(--display);letter-spacing:.12em;font-variant-numeric:tabular-nums;color:var(--ink)}
 
-/* SANチェック用の普通のダイス（賽の神の目が開いている間だけ現れる） */
+/* SANチェック用の普通のサイコロ（賽の神の目が開いている間だけ現れる） */
 .sdie{display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);width:calc(12*var(--q));height:calc(12*var(--q));margin:calc(2.4*var(--q)) auto 0;padding:calc(1.3*var(--q));border:calc(.38*var(--q)) solid var(--ink);background:var(--paper);color:var(--ink);cursor:default;-webkit-appearance:none;appearance:none;border-radius:0}
 .sdie.mine{cursor:pointer}
 .sdie .sp{width:calc(2.5*var(--q));height:calc(2.5*var(--q));border-radius:50%;background:var(--ink);place-self:center}
@@ -173,22 +173,29 @@ button,input{font-family:inherit}
 .ov-btn:focus-visible{outline:calc(.7*var(--q)) solid #ff7373;outline-offset:calc(.8*var(--q))}
 .ov-note{margin:calc(4*var(--q)) 0 0;min-height:1.5em;font:500 calc(3*var(--q))/1.5 var(--ui);color:#cfcfcf}
 .ov-kicker{margin:0 0 calc(3*var(--q));font:700 calc(3.8*var(--q))/1.4 var(--display);letter-spacing:.3em;color:var(--ink-soft)}
-.ov.clear .ov-title{font-size:calc(15*var(--q));margin-bottom:calc(5*var(--q))}
-.credits{margin:0;display:grid;gap:calc(2.6*var(--q));width:100%;max-width:calc(78*var(--q))}
+.ov.clear .ov-title{font-size:calc(14*var(--q));margin-bottom:calc(3.5*var(--q))}
+.result{margin:0 0 calc(4*var(--q));width:100%;max-width:calc(78*var(--q));display:grid;grid-template-columns:1fr 1fr;gap:calc(3*var(--q));padding:calc(3*var(--q)) 0;border-top:calc(.35*var(--q)) solid var(--ink);border-bottom:calc(.35*var(--q)) solid var(--ink)}
+.result div{display:grid;gap:calc(1*var(--q))}
+.result dt{font:500 calc(2.7*var(--q))/1.3 var(--ui);letter-spacing:.14em;color:var(--ink-soft)}
+.result dd{margin:0;font:900 calc(7*var(--q))/1.1 var(--display);letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.credits{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:calc(2.2*var(--q)) calc(4*var(--q));width:100%;max-width:calc(86*var(--q))}
+.credits>div:last-child{grid-column:1/-1}
 .credits div{display:grid;gap:calc(.8*var(--q))}
 .credits dt{font:500 calc(2.9*var(--q))/1.3 var(--ui);letter-spacing:.24em;color:var(--ink-soft)}
-.credits dd{margin:0;font:900 calc(4.6*var(--q))/1.3 var(--display);letter-spacing:.1em;overflow-wrap:anywhere}
-.credits dd.sm{font-size:calc(3.3*var(--q));font-weight:700;letter-spacing:.06em}
-.ov-end{margin:calc(6*var(--q)) 0 0;font:700 calc(3.2*var(--q))/1 var(--display);letter-spacing:.3em;color:var(--ink-soft)}
+.credits dd{margin:0;font:900 calc(4.2*var(--q))/1.3 var(--display);letter-spacing:.1em;overflow-wrap:anywhere}
+.credits dd.sm{font-size:calc(3*var(--q));font-weight:700;letter-spacing:.06em}
+.ov-end{margin:calc(4.5*var(--q)) 0 0;font:700 calc(3.2*var(--q))/1 var(--display);letter-spacing:.3em;color:var(--ink-soft)}
 @keyframes rise{from{opacity:0;transform:translateY(calc(2.4*var(--q)))}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:no-preference){
-  .ov.clear .ov-kicker,.ov.clear .ov-title,.ov.clear .credits>div,.ov.clear .ov-end{animation:rise .9s ease both}
+  .ov.clear .ov-kicker,.ov.clear .ov-title,.ov.clear .result,.ov.clear .credits>div,.ov.clear .ov-end{animation:rise .9s ease both}
+  .ov.clear .result{animation-delay:.7s}
   .ov.clear .ov-title{animation-delay:.25s}
-  .ov.clear .credits>div:nth-child(1){animation-delay:.9s}
-  .ov.clear .credits>div:nth-child(2){animation-delay:1.3s}
-  .ov.clear .credits>div:nth-child(3){animation-delay:1.7s}
+  .ov.clear .credits>div:nth-child(1){animation-delay:1.2s}
+  .ov.clear .credits>div:nth-child(2){animation-delay:1.5s}
+  .ov.clear .credits>div:nth-child(3){animation-delay:1.8s}
   .ov.clear .credits>div:nth-child(4){animation-delay:2.1s}
-  .ov.clear .ov-end{animation-delay:2.6s}
+  .ov.clear .credits>div:nth-child(5){animation-delay:2.4s}
+  .ov.clear .ov-end{animation-delay:2.9s}
   .ov.over .ov-title{animation:jit 1.1s steps(1,end) infinite}
 }
 
@@ -216,7 +223,8 @@ button,input{font-family:inherit}
 /* ---------- 共通パーツ ---------- */
 .cap{width:min(100%,560px);margin:16px auto 0}
 .cap p{margin:0 0 8px}
-.how{font-size:14px}
+.how{font-size:14px;text-wrap:balance}
+@media (min-width:600px){.cap .how{white-space:nowrap;font-size:min(14px,calc(var(--sw,100vw) / 48))}}
 .msg{min-height:1.65em;font-size:14px;font-weight:700}
 .status{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;font-size:12.5px;color:var(--ink-soft)}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--ink-soft);flex:none}
@@ -228,7 +236,9 @@ button,input{font-family:inherit}
 /* ---------- 役割の選択 ---------- */
 .pick{text-align:center}
 .pick h1{margin:6vh 0 10px;font:900 clamp(26px,7vw,44px)/1.25 var(--display);letter-spacing:.14em}
-.pick p{max-width:34em;margin:0 auto 6px}
+.pick p{max-width:none;margin:0 auto 6px}
+@media (min-width:600px){.pick p{white-space:nowrap}}
+@media (max-width:599px){.pick p{text-wrap:balance}}
 .roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:22px auto 0;max-width:560px}
 .roles button{border:2px solid var(--ink);background:var(--paper);color:var(--ink);padding:22px 12px;font:900 20px var(--display);letter-spacing:.14em;cursor:pointer;border-radius:0}
 .roles button small{display:block;margin-top:4px;font:500 12px var(--ui);letter-spacing:.04em;color:inherit}
@@ -247,7 +257,10 @@ button,input{font-family:inherit}
 @supports (height:100dvh){@media (min-width:861px){.gm .stage{width:min(100%,calc((100dvh - 170px) * .8))}}}
 .hint{margin:10px 0 0;font-size:12.5px;color:var(--ink-soft)}
 .notice{margin:0 0 14px;padding:10px 12px;border:2px solid var(--pip);font-size:13.5px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,350px),1fr));gap:16px;margin-top:18px}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:18px}
+@media (max-width:640px){.cards{grid-template-columns:minmax(0,1fr)}}
+.gm-foot{display:grid;gap:18px;margin-top:18px}
+.gm-foot .sec{margin-top:0}
 .card{border:2px solid var(--ink);padding:14px;display:grid;gap:12px;min-width:0;align-content:start}
 .card h2{margin:0;font:900 18px/1.3 var(--display);letter-spacing:.14em;overflow-wrap:anywhere}
 .nm{display:flex;gap:8px;align-items:center;font-size:12.5px;margin-top:6px}
@@ -418,7 +431,7 @@ const allLit=s=>[0,1,2,3,4].every(i=>isLit(s,i));
 const isOver=s=>s.san.p1<=0||s.san.p2<=0;
 const DEFAULT_STATE={
   names:{p1:'player1',p2:'player2'},
-  san:{p1:30,p2:30},
+  san:{p1:31,p2:31},
   crit:{p1:5,p2:5},
   fumble:{p1:96,p2:96},
   words:{p1:{sai:0,dice:0},p2:{sai:0,dice:0}},
@@ -426,6 +439,7 @@ const DEFAULT_STATE={
   pips:[false,false,false,false,false,false],
   found:[],
   guessed:0,
+  stats:{start:0,end:0,base:0},
   god:0,
   sanOn:{p1:false,p2:false},
   sanDue:{p1:false,p2:false},
@@ -566,6 +580,8 @@ function normalize(d){
   if(Array.isArray(d.pips))s.pips=s.pips.map((_,i)=>d.pips[i]===true);
   if(Array.isArray(d.found))s.found=FOUND_SET.filter(v=>d.found.indexOf(v)>=0);
   s.guessed=toInt(d.guessed,0,GUESS_N,0);
+  const stt=d.stats&&typeof d.stats==='object'?d.stats:{};
+  s.stats={start:toInt(stt.start,0,1e14,0),end:toInt(stt.end,0,1e14,0),base:toInt(stt.base,0,1e7,0)};
   s.god=d.god===true?2:toInt(d.god,0,2,0);
   if(s.god===2)ROLES.forEach(r=>{s.sanOn[r]=true;});
   else if(s.god===0)ROLES.forEach(r=>{s.sanOn[r]=false;});
@@ -619,6 +635,9 @@ let saveTimer=null,saveBusy=false;
 const gmBusy=()=>saveTimer!==null||saveBusy;
 function gmEdit(fn){
   const s=clone(store.state);fn(s);
+  const clr=allLit(s)&&!isOver(s);
+  if(clr&&!s.stats.end)s.stats.end=Date.now();
+  if(!clr&&s.stats.end)s.stats.end=0;
   store.state=normalize(s);emit();
   clearTimeout(saveTimer);saveTimer=setTimeout(flush,180);
 }
@@ -677,8 +696,9 @@ async function cancelWait(k){
   if(!store.db)return;
   try{await store.db.doc('rounds/'+k).set(nrec);}catch(e){setStatus('writefail');}
 }
-async function resetAll(){
-  gmEdit(s=>{Object.assign(s,clone(DEFAULT_STATE));});
+async function resetAll(keep){
+  const old=store.state.stats,base=old.base+nOf('p1')+nOf('p2'),start=old.start;
+  gmEdit(s=>{Object.assign(s,clone(DEFAULT_STATE));if(keep===true)s.stats={start:start,end:0,base:base};});
   store.rolls={};store.sans={};store.log=[];store.contPending=false;
   if(store.processed!==null)store.processed=0;
   emit();
@@ -689,7 +709,7 @@ async function resetAll(){
 }
 
 async function requestContinue(){
-  if(store.isGM){resetAll();return;}
+  if(store.isGM){resetAll(true);return;}
   store.contPending=true;emit();
   if(!store.db)return;
   try{await store.db.doc('control/continue').set({at:Date.now(),nonce:Math.random().toString(36).slice(2)});}
@@ -697,6 +717,13 @@ async function requestContinue(){
 }
 
 /* ---------- GMの自動判定（条件2・3、ファンブルによる賽の神） ---------- */
+function gmStats(){
+  if(!store.loaded||store.state.stats.start)return;
+  const recs=ROLES.map(r=>store.rolls[r]).filter(x=>x&&x.n>0);
+  if(!recs.length)return;
+  const at=Math.min.apply(null,recs.map(x=>x.at||Date.now()));
+  gmEdit(s=>{s.stats.start=at;});
+}
 function gmProcess(fromCache){
   const r=completedRound();
   if(store.processed===null){if(!fromCache)store.processed=r;return;}
@@ -748,6 +775,7 @@ async function connect(){
   const live=()=>{clearTimeout(timer);if(store.status==='connecting'||store.status==='slow')setStatus('live');};
   db.doc('game/v2').onSnapshot(snap=>{
     if(!gmBusy())store.state=normalize(snap.exists?snap.data():null);
+    if(!snap.metadata.fromCache)store.loaded=true;
     if(!snap.metadata.fromCache)live();
     emit();
   },()=>setStatus('error'));
@@ -759,7 +787,7 @@ async function connect(){
     });
     store.rolls=r;
     if(!snap.metadata.fromCache)live();
-    if(store.isGM)gmProcess(snap.metadata.fromCache);
+    if(store.isGM){gmStats();gmProcess(snap.metadata.fromCache);}
     emit();
   },()=>setStatus('error'));
   db.doc('control/continue').onSnapshot(snap=>{
@@ -768,7 +796,7 @@ async function connect(){
     if(store.ctlNonce===undefined){store.ctlNonce=nonce;return;}
     if(nonce&&nonce!==store.ctlNonce){
       store.ctlNonce=nonce;
-      if(store.isGM){addLog('Continue が押されたので初期化');resetAll();}
+      if(store.isGM){addLog('Continue が押されたので初期化');resetAll(true);}
     }else if(!nonce){store.ctlNonce=null;}
   },()=>{});
   db.collection('sans').onSnapshot(snap=>{
@@ -798,6 +826,7 @@ function overlayHTML(){
     '<div class="ov clear" hidden>'+
       '<p class="ov-kicker">サイコロ愛好家の皆様へ</p>'+
       '<h2 class="ov-title">脱出成功</h2>'+
+      '<dl class="result"><div><dt>クリア時間</dt><dd data-o="rtime"></dd></div><div><dt>サイコロを振った回数</dt><dd data-o="rrolls"></dd></div></dl>'+
       '<dl class="credits">'+CREDITS.map(c=>'<div><dt>'+c[0]+'</dt><dd'+(c[2]?' class="sm"':'')+'>'+c[1]+'</dd></div>').join('')+'</dl>'+
       '<p class="ov-end">Thank you for playing</p>'+
     '</div>';
@@ -833,6 +862,7 @@ function createStage(role,handlers,opts){
   const pipEls=Array.prototype.slice.call(el.querySelectorAll('.pip'));
   const spin={},dkey={},sspin={},skey={};
   const ovOver=el.querySelector('.ov.over'),ovClear=el.querySelector('.ov.clear');
+  const rTime=el.querySelector('[data-o="rtime"]'),rRolls=el.querySelector('[data-o="rrolls"]');
   const ovSub=el.querySelector('[data-o="oversub"]'),ovBtn=el.querySelector('[data-o="cont"]'),ovNote=el.querySelector('[data-o="contnote"]');
   ovBtn.addEventListener('click',()=>{if(handlers.cont)handlers.cont();});
   let lastWrath=null,lastNoise=null,noiseTimer=null,godTimer=null,entTimer=null,godPending=false;
@@ -921,7 +951,7 @@ function createStage(role,handlers,opts){
     renderBox(k,sh);
   }
 
-  /* SANチェック用ダイス */
+  /* SANチェック用サイコロ */
   function renderSdie(k,val){
     const b=sdies[k];
     if(!val){b.innerHTML='<span class="q">?</span>';return;}
@@ -944,7 +974,7 @@ function createStage(role,handlers,opts){
     const rec=store.sans[k];
     const val=rec?rec.value:0;
     sdies[k].classList.toggle('tap',k===role&&val===0);
-    sdies[k].setAttribute('aria-label',val?'SANチェックの出目 '+val:'SANチェックのダイス');
+    sdies[k].setAttribute('aria-label',val?'SANチェックの出目 '+val:'SANチェックのサイコロ');
     if(sspin[k])return;
     const key='v'+val;
     if(skey[k]===key)return;
@@ -975,6 +1005,12 @@ function createStage(role,handlers,opts){
     if(!godPending)el.classList.toggle('god',wrath);
     const over=isOver(s),cleared=!over&&allLit(s);
     ovOver.hidden=!over;ovClear.hidden=!cleared;
+    if(cleared){
+      const stt=s.stats,ms=stt.start?Math.max(0,(stt.end||Date.now())-stt.start):0,sec=Math.floor(ms/1000);
+      const two=n=>(n<10?'0':'')+n;
+      rTime.textContent=Math.floor(sec/3600)+':'+two(Math.floor(sec/60)%60)+':'+two(sec%60);
+      rRolls.textContent=(stt.base+nOf('p1')+nOf('p2'))+'回';
+    }
     if(over){
       ovSub.textContent=ROLES.filter(k=>s.san[k]<=0).map(k=>s.names[k]).join('、')+'のSAN値が尽きました';
       ovNote.textContent=store.contPending?'送りました。反応がないときはGMに声をかけてください。':'';
@@ -1054,7 +1090,7 @@ function playerView(role){
     const mine=shownOf(role),oth=shownOf(other(role));
     const sd=store.state.sanDue,myRec=store.sans[role];
     let text=mine.kind==='pending'?'相手が押すのを待っています…':(oth.kind==='pending'?'相手の準備ができています。タップすると同時に振られます。':'');
-    if(sd[role])text=(myRec&&myRec.value>0)?'GMがSAN値を減らすのを待っています。終わるまでサイコロは振れません。':'賽の神のSANチェックです。SANダイスをタップして振ってください。終わるまでサイコロは振れません。';
+    if(sd[role])text=(myRec&&myRec.value>0)?'GMがSAN値を減らすのを待っています。終わるまでサイコロは振れません。':'賽の神のSANチェックです。SANサイコロをタップして振ってください。終わるまでサイコロは振れません。';
     else if(sd[other(role)])text='相手のSANチェックが終わるまで、サイコロは振れません。';
     msg.textContent=text;
     let key=store.status;
@@ -1080,8 +1116,8 @@ function cardHTML(k){
       '<button type="button" class="btn" data-act="san" data-d="1">＋1</button>'+
       '<button type="button" class="btn" data-act="san" data-d="5">＋5</button>'+
     '</div></div>'+
-    '<div class="sdrow"><span class="k">SANダイス</span><span class="st" data-o="sanstat"></span><button type="button" class="btn wide" data-act="sanapply" disabled>適用</button></div>'+
-    '<div class="group"><span class="k">発言の回数</span>'+word('sai','サイコロ')+word('dice','ダイス')+'</div>'+
+    '<div class="sdrow"><span class="k">SANサイコロ</span><span class="st" data-o="sanstat"></span><button type="button" class="btn wide" data-act="sanapply" disabled>適用</button></div>'+
+    '<div class="group"><span class="k">発言の回数</span>'+word('sai','サイコロ')+word('dice','ダイス（禁句）')+'</div>'+
     '<div class="group"><span class="k">ゲージの範囲</span>'+
       '<div class="line"><span class="k">クリティカル</span><output data-o="crit"></output>'+stepper('crit',[-1,1,3])+'</div>'+
       '<div class="line"><span class="k">ファンブル</span><output data-o="fumble"></output>'+stepper('fumble',[-1,1,3])+'</div>'+
@@ -1110,24 +1146,26 @@ function gmView(){
             '<button type="button" class="btn hot" data-act="eye" aria-pressed="false">目を開く</button>'+
             '<button type="button" class="btn hot" data-act="wrath" aria-pressed="false">怒りを呼ぶ</button>'+
             '<button type="button" class="btn" data-act="calm" aria-pressed="false">鎮める</button></div>'+
-          '<p class="note">目を開く: 画面はそのまま。賽の神が目を開き、対象のSANダイスが現れます（1回きり）。怒りを呼ぶ: 画面が崩れ、2人に毎ターンSANダイスが現れます。</p>'+
+          '<p class="note">目を開く: 画面はそのまま。賽の神が目を開き、対象のSANサイコロが現れます（1回きり）。怒りを呼ぶ: 画面が崩れ、2人に毎ターンSANサイコロが現れます。</p>'+
           '<div class="line"><button type="button" class="btn wide" data-act="sanrelease">SANチェック待ちを解除</button><span class="note" data-o="sanwait"></span></div>'+
           '<button type="button" class="btn" data-act="auto" aria-pressed="true">自動判定</button>'+
           '<p class="note">オンの間、次を自動で行います。2人同時クリティカルで目2を点灯、条件3の値を記録、片方のファンブルで目を開く、2人同時ファンブルで怒りを呼ぶ、「サイコロ」が合計30回で目1を点灯、「ダイス」が合計30回で怒りを呼ぶ。手動の操作はオンでもいつでもできます。</p>'+
         '</section>'+
         '<div class="totals" style="margin-top:18px"><div class="tot" data-t="sai"></div><div class="tot" data-t="dice"></div></div>'+
-        '<div class="cards">'+cardHTML('p1')+cardHTML('p2')+'</div>'+
         '<section class="sec" style="margin-top:18px"><h2>サイコロの目（条件）</h2>'+
           '<div class="pipbtns" role="group" aria-label="点灯する目">'+PIP_LABEL.map((t,i)=>'<button type="button" class="btn pb" data-act="pip" data-i="'+i+'" aria-pressed="false"><i></i><span>'+t+'</span></button>').join('')+
           '<button type="button" class="btn" data-act="clearpips">すべて消す</button></div>'+
           '<p class="note">サイコロの目は5つ固定です。四隅が条件1〜4、中央が「脱出条件を全て推測する」。目3は、下の6つの値を見つけた数だけ6分割で点灯します（点灯が始まるまでは他の目と同じ見た目です）。</p>'+
           '<div class="chips" role="group" aria-label="条件3で見つけた値">'+FOUND_SET.map(v=>'<button type="button" class="btn chip" data-act="found" data-v="'+v+'" aria-pressed="false">'+v+'</button>').join('')+'</div>'+
-          '<div class="line"><span class="k">目5 推測</span><output data-o="guess">0 / 5</output><span class="n">条件が分かった数（1つにつき5分の1が点灯）</span>'+
+          '<div class="line"><span class="k">目5 推測</span><output data-o="guess">0 / 4</output><span class="n">条件が分かった数（1つにつき4分の1が点灯）</span>'+
             '<div class="steps"><button type="button" class="btn" data-act="guess" data-d="-1">−1</button><button type="button" class="btn" data-act="guess" data-d="1">＋1</button></div></div>'+
         '</section>'+
-        '<section class="sec" style="margin-top:18px"><h2>記録</h2><ol class="log"></ol></section>'+
-        '<section class="sec" style="margin-top:18px"><h2>初期化</h2><button type="button" class="dangerbtn" data-act="reset">ゲームを初期化する</button></section>'+
       '</div>'+
+    '</div>'+
+    '<div class="cards">'+cardHTML('p1')+cardHTML('p2')+'</div>'+
+    '<div class="gm-foot">'+
+      '<section class="sec"><h2>記録</h2><ol class="log"></ol></section>'+
+      '<section class="sec"><h2>初期化</h2><button type="button" class="dangerbtn" data-act="reset">ゲームを初期化する</button><p class="note">最初からやり直します。クリア時間とサイコロを振った回数も 0 に戻ります（Continue では引き継がれます）。</p></section>'+
     '</div>';
   const stage=createStage(null,{roll(){},sanRoll(){},cont:requestContinue});
   el.querySelector('.slot-stage').appendChild(stage.el);
@@ -1152,9 +1190,7 @@ function gmView(){
   function bump(s,k,type,delta){
     const w=s.words[k],old=w[type],nw=Math.max(0,old+delta);
     w[type]=nw;
-    let step=0;
-    if(delta>0&&nw%3===0&&nw>old)step=1;
-    if(delta<0&&old%3===0&&old>0&&nw<old)step=-1;
+    const step=nw-old;
     if(step){
       if(type==='sai')s.crit[k]=clamp(s.crit[k]+step,0,49);
       else s.fumble[k]=clamp(s.fumble[k]-step,51,101);
@@ -1264,13 +1300,13 @@ function gmView(){
       const w=s.words[k];
       c.querySelector('output[data-o="sai"]').textContent=String(w.sai);
       c.querySelector('output[data-o="dice"]').textContent=String(w.dice);
-      c.querySelector('[data-o="sain"]').textContent='あと'+(3-w.sai%3)+'回でクリティカル範囲＋1';
-      c.querySelector('[data-o="dicen"]').textContent='あと'+(3-w.dice%3)+'回でファンブル範囲＋1';
+      c.querySelector('[data-o="sain"]').textContent='1回ごとにクリティカル範囲＋1';
+      c.querySelector('[data-o="dicen"]').textContent='1回ごとにファンブル範囲＋1';
 
       const sd=store.sans[k],sv=sd?sd.value:0,vis=s.god>0&&s.sanOn[k];
       const stEl=c.querySelector('[data-o="sanstat"]'),ap=c.querySelector('[data-act="sanapply"]');
       stEl.textContent='';
-      if(!vis){stEl.textContent='ダイスは出ていません';ap.disabled=true;ap.textContent='適用';}
+      if(!vis){stEl.textContent='まだ出ていません';ap.disabled=true;ap.textContent='適用';}
       else if(!sv){stEl.textContent='プレイヤーが振るのを待っています';ap.disabled=true;ap.textContent='適用';}
       else{
         const loss=sv;
@@ -1312,7 +1348,7 @@ function gmView(){
     el.querySelector('[data-act="auto"]').textContent='自動判定　'+(s.auto?'オン':'オフ');
 
     totalsHTML(el.querySelector('[data-t="sai"]'),'サイコロ',s.words.p1.sai+s.words.p2.sai,'条件1 到達');
-    totalsHTML(el.querySelector('[data-t="dice"]'),'ダイス',s.words.p1.dice+s.words.p2.dice,'怒りの条件 到達');
+    totalsHTML(el.querySelector('[data-t="dice"]'),'禁句「ダイス」',s.words.p1.dice+s.words.p2.dice,'怒りの条件 到達');
 
     el.querySelectorAll('[data-act="pip"]').forEach(b=>{
       const i=Number(b.dataset.i);
